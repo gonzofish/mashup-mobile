@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <style>
+            body { background-color: black; color: white; }
+        </style>
+    </head>
+
+    <body>
+        <h1>A substitute center pane?!</h1>
+        <button onclick="callBase()">Swap Panels</button>
+        <script src="../scripts/mashup-util.js"></script>
+        <script>
+            (function() {
+                window.mashupUtil.messaging.subscribe('center', 'alt-base', function(payload) {
+                    console.info(payload);
+                    window.mashupUtil.bringToFront();
+                });
+
+                window.callBase = function() {
+                    window.mashupUtil.messaging.publish('center', 'base', 'you got it!');
+                };
+            })();
+        </script>
+    </body>
+</html>

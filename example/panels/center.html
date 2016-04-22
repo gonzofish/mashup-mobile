@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <style>
+            body { background-color: black; color: white; }
+        </style>
+    </head>
+
+    <body>
+        <h1>This is the center Pane</h1>
+        <button onclick="callAltBase()">Swap Panels</button><br><br>
+        <button onclick="showPanel('top')">Show Top</button><br>
+        <button onclick="showPanel('left')">Show Left</button><br>
+        <button onclick="showPanel('right')">Show Right</button><br>
+        <button onclick="showPanel('bottom')">Show Bottom</button>
+
+        <div style="margin-top: 1800px">This should be a ways down.</div>
+        <script src="../scripts/mashup-util.js"></script>
+        <script>
+            (function() {
+                window.mashupUtil.messaging.subscribe('center', 'base', function(payload) {
+                    console.info(payload);
+                    window.mashupUtil.bringToFront();
+                });
+
+                window.callAltBase = function() {
+                    window.mashupUtil.messaging.publish('center', 'alt-base', 'you got it!');
+                };
+
+                window.showPanel = function(panelType) {
+                    var intentInfo = getIntentInfo(panelType);
+
+                    window.mashupUtil.messaging.publish(
+                        intentInfo.intent,
+                        intentInfo.action,
+                        intentInfo.payload
+                    );
+                };
+
+                function getIntentInfo(type) {
+                    var intents = {
+                        bottom: { intent: 'bottom', action: 'show', payload: 'bottom-bottom' },
+                        left: { intent: 'left', action: 'show', payload: 'out in the rain' },
+                        right: { intent: 'right', action: 'show', payload: '90 degree' },
+                        top: { intent: 'top', action: 'show', payload: 'tip top tup' }
+                    };
+
+                    return intents[type];
+                }
+            })();
+        </script>
+    </body>
+</html>

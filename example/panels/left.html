@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <style>
+        </style>
+    </head>
+
+    <body>
+        <h1>To the left, to the left...</h1>
+        <p>Received message:<span class="message"></span></p>
+
+        <button onclick="showPanel('top')">Show Top</button>
+        <button onclick="showPanel('center')">Show Center Alt</button>
+
+        <script src="../scripts/mashup-util.js"></script>
+        <script>
+            (function() {
+                window.mashupUtil.messaging.subscribe('left', 'show', function(payload) {
+                    var message = document.body.querySelector('.message');
+
+                    message.innerHTML = payload;
+                    window.mashupUtil.bringToFront();
+                });
+
+                window.showPanel = function(panelType) {
+                    var intentInfo = getIntentInfo(panelType);
+
+                    window.mashupUtil.messaging.publish(
+                        intentInfo.intent,
+                        intentInfo.action,
+                        intentInfo.payload
+                    );
+                };
+
+                function getIntentInfo(type) {
+                    var intents = {
+                        bottom: { intent: 'bottom', action: 'show', payload: 'bottom-left' },
+                        center: { intent: 'center', action: 'alt-base', payload: 'BOOM BOOM' },
+                        right: { intent: 'right', action: 'show', payload: '90 degree left' },
+                        top: { intent: 'top', action: 'show', payload: 'tip top left' }
+                    };
+
+                    return intents[type];
+                }
+            })();
+        </script>
+    </body>
+</html>

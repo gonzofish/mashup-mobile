@@ -12,8 +12,51 @@ body {
 .panel {
     border: 0;
     height: 100%;
+    position: absolute;
+    top: 0;
+    transition: left 0.5s linear, top 0.5s linear;
+    width: 100%;
 }
 
-.panel.center {
+.panel.active {
+    left: 0 !important;
+    top: 0 !important;
+}
+
+.panel.center.bottom {
+    top: -100%;
+}
+.panel.center.left {
+    left: 100%;
+}
+.panel.center.right {
+    left: -100%;
+}
+.panel.center.top {
+    top: 100%;
+}
+
+.panel.bottom {
+    top: 100%;
+}
+.panel.left {
+    left: -100%;
+}
+.panel.right {
+    left: 100%;
+}
+.panel.top {
+    top: -100%;
+}
+
+.panel iframe.app-frame {
+    display: none;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
     width: 100%;
+}
+.panel iframe.app-frame.active {
+    display: block;
 }
