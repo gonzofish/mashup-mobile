@@ -1,0 +1,19 @@
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+.panel {
+    border: 0;
+    height: 100%;
+}
+
+.panel.center {
+    width: 100%;
+}
