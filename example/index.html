@@ -15,48 +15,12 @@
                 var centerFrames = [];
 
                 window.mashupMobile.init({
-                    bottom: [{ url: 'panels/bottom.html' }],
-                    center: [{ url: 'panels/center.html' }, { url: 'panels/center-alt.html', active: true }],
-                    left: [{ url: 'panels/left.html' }],
+                    bottom: [{ name: 'Bottom', url: 'panels/bottom.html' }],
+                    center: [{ name: 'Center', url: 'panels/center.html' }, { name: 'Center-Alt', url: 'panels/center-alt.html', active: true }],
+                    left: [{ name: 'Left', url: 'panels/left.html' }],
                     right: [{ url: 'panels/right.html' }],
-                    top: [{ url: 'panels/top.html' }]
-                });
-
-                getCenterFrames();
-                setCenterSwapKeyUp(document.body);
-
-                function getCenterFrames() {
-                    var centerPane = document.querySelector('.center');
-
-                    Array.from(centerPane.querySelectorAll('iframe')).forEach(function(frame) {
-                        frame.addEventListener('load', function() {
-                            centerFrames.push(frame.contentWindow.document.body);
-                            setCenterSwapKeyUp(frame.contentWindow.document.body);
-                        });
-                    });
-                }
-
-                function setCenterSwapKeyUp(element) {
-                    element.addEventListener('keyup', function(event) {
-                        if (event.keyCode === 65 && event.shiftKey && event.ctrlKey) {
-                            swapCenterFrames();
-                        }
-                    });
-                }
-
-                function swapCenterFrames() {
-                    var focusFrame = centerFrames.reduce(function(newFocusFrame, frame) {
-                        if (!frame.iframe.classList.contains('active')) {
-                            newFocusFrame = frame;
-                        }
-
-                        return newFocusFrame;
-                    });
-
-                    if (focusFrame) {
-                        window.mashupMobile.bringToFront(focusFrame);
-                    }
-                }
+                    top: [{ name: 'Top', url: 'panels/top.html' }]
+                }, ['Center', 'Center-Alt', 'Bottom', 'Top']);
             })();
         </script>
     </body>

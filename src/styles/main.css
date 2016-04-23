@@ -13,6 +13,7 @@ body {
     position: relative;
 }
 
+.panel-container,
 .panel {
     border: 0;
     box-sizing: border-box;
@@ -23,6 +24,14 @@ body {
     top: 0;
     transition: left 0.5s linear, top 0.5s linear;
     width: 100%;
+}
+
+.panel-container {
+    transition: none;
+}
+.panel-container.toolbar {
+    height: calc(100% - 24px);
+    top: 30px;
 }
 
 .panel.active {
@@ -67,4 +76,31 @@ body {
 }
 .panel iframe.app-frame.active {
     display: block;
+}
+
+ul.toolbar {
+    background-color: gainsboro;
+    color: black;
+    display: block;
+    height: 30px;
+    left: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    top: 0;
+    width: 100%;
+}
+ul.toolbar li {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0;
+    margin-right: 2px;
+    padding: 5px;
+}
+ul.toolbar li:first-child {
+    margin-left: 10px;
+}
+ul.toolbar li:hover {
+    background-color: darkgray;
 }

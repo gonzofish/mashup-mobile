@@ -2,27 +2,44 @@
 
 (function(mashupMobile) {
     var activePanelType;
+    var toolbarApps;
     var panels;
     var subscriptions = {};
 
-    mashupMobile.init = function init(apps) {
-        apps = apps || {};
-        panels = createPanels(apps);
+    mashupMobile.init = function init(apps, toolbarOrder) {
+        var panelContainer;
 
+        apps = apps || {};
+        toolbarApps = [];
+        toolbarOrder = toolbarOrder || [];
+
+        panelContainer = createPanelContainer();
+        panels = createPanels(apps, panelContainer);
+
+        createToolbar(panelContainer, toolbarOrder);
         showPanel('center');
     };
 
-    function createPanels(apps) {
+    function createPanelContainer() {
+        var panelContainer = document.createElement('div');
+
+        panelContainer.classList.add('panel-container');
+        document.body.appendChild(panelContainer);
+
+        return panelContainer;
+    }
+
+    function createPanels(apps, panelContainer) {
         return {
-            bottom: createPanel('bottom', apps.bottom),
-            center: createPanel('center', apps.center),
-            left: createPanel('left', apps.left),
-            right: createPanel('right', apps.right),
-            top: createPanel('top', apps.top)
+            bottom: createPanel('bottom', apps.bottom, panelContainer),
+            center: createPanel('center', apps.center, panelContainer),
+            left: createPanel('left', apps.left, panelContainer),
+            right: createPanel('right', apps.right, panelContainer),
+            top: createPanel('top', apps.top, panelContainer)
         };
     }
 
-    function createPanel(panelType, apps) {
+    function createPanel(panelType, apps, panelContainer) {
         var activeSet = false;
         var appFrames = [];
         var panel;
@@ -32,15 +49,13 @@
             panel = createPanelDOM(panelType);
             appFrames = createAppFrames(apps, panel);
 
-            ensureActiveFrame(appFrames);
-            appFrames.forEach(function(appFrame) {
-                panel.appendChild(appFrame);
-            });
+            addFramesToPanel(appFrames.frames, panel);
+            addAppsToToolbar(appFrames.toolbar);
 
-            document.body.appendChild(panel);
+            panelContainer.appendChild(panel);
             hammertime = hammerifyElement(panel, panelType);
 
-            hammerifyFramesOnLoad(appFrames, panelType);
+            hammerifyFramesOnLoad(appFrames.frames, panelType);
         }
 
         return hammertime;
@@ -62,10 +77,16 @@
         return apps.reduce(function(frames, app) {
             var appFrame = createAppFrame(app);
 
-            frames.push(appFrame);
+            frames.frames.push(appFrame);
+            if (app.name) {
+                frames.toolbar.push({
+                    name: app.name,
+                    frame: appFrame
+                });
+            }
 
             return frames;
-        }, []);
+        }, { frames: [], toolbar: []});
     }
 
     function createAppFrame(app) {
@@ -84,6 +105,13 @@
         return iframe;
     }
 
+    function addFramesToPanel(frames, panel) {
+        ensureActiveFrame(frames);
+        frames.forEach(function(frame) {
+            panel.appendChild(frame);
+        });
+    }
+
     function ensureActiveFrame(appFrames) {
         if (!checkHasActiveFrame(appFrames)) {
             appFrames[0].classList.add('active');
@@ -98,6 +126,10 @@
 
             return hasActive;
         }, false);
+    }
+
+    function addAppsToToolbar(appsForToolbar) {
+        toolbarApps = toolbarApps.concat(appsForToolbar);
     }
 
     function hammerifyFramesOnLoad(appFrames, panelType) {
@@ -236,6 +268,62 @@
         panels.center.element.classList.add(panelType);
     }
 
+    function createToolbar(panelContainer, toolbarOrder) {
+        var toolbarDOM;
+
+        if (toolbarApps.length > 0) {
+            toolbarDOM = generateToolbarDOM(toolbarOrder);
+            panelContainer.classList.add('toolbar');
+            document.body.insertBefore(toolbarDOM, panelContainer);
+        }
+    }
+
+    function generateToolbarDOM(toolbarOrder) {
+        var toolbar = document.createElement('ul');
+        var orderedToolbarApps = sortToolbarApps(toolbarApps, toolbarOrder);
+
+        toolbar.classList.add('toolbar');
+        orderedToolbarApps.forEach(function(app) {
+            toolbar.appendChild(generateToolbarAppDOM(app));
+        });
+
+        return toolbar;
+    }
+
+    function sortToolbarApps(apps, order) {
+        var toolbarAppsCopy = apps.slice();
+        var appsByName = {};
+        var orderedApps = [];
+
+        apps.forEach(function(app) {
+            appsByName[app.name] = app;
+        });
+
+        order.forEach(function(appName) {
+            var app = appsByName[appName];
+            var appIndex = toolbarAppsCopy.indexOf(app);
+
+            orderedApps.push(app);
+            toolbarAppsCopy.splice(appIndex, 1);
+        });
+
+        return orderedApps.concat(toolbarAppsCopy);
+    }
+
+    function generateToolbarAppDOM(app) {
+        var toolbarApp = document.createElement('li');
+
+        toolbarApp.appFrame = app.frame;
+        toolbarApp.innerHTML = app.name;
+        toolbarApp.addEventListener('click', bringToolbarToFront);
+
+        return toolbarApp;
+    }
+
+    function bringToolbarToFront(event) {
+        mashupMobile.bringToFront(event.target.appFrame.contentWindow.document.body);
+    }
+
     mashupMobile.bringToFront = function bringToFront(appBody) {
         var panelType = appBody.panelType;
         var panel = panels[panelType].element;
@@ -256,10 +344,6 @@
         hidePanel(activePanelType);
         showPanel(panelType);
     };
-
-    function hideActivePanel() {
-
-    }
 
     mashupMobile.messaging = {
         publish: publish,
