@@ -268,6 +268,7 @@
     };
 
     function publish(intent, dataType, payload) {
+        console.info('PUBLISH:', intent);
         var subscriptionKey = createSubscriptionKey(intent, dataType);
         var subscription = getSubscription(intent, dataType);
 
@@ -278,6 +279,7 @@
     }
 
     function subscribe(intent, dataType, callback) {
+        console.info('SUBSCRIBE:', intent);
         var subscriptionKey = createSubscriptionKey(intent, dataType);
         var subscription = getSubscription(intent, dataType);
 

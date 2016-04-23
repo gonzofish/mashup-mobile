@@ -6,5 +6,41 @@
 
     <body>
         <h1>Bottom's up!</h1>
+        <p>Received message:<span class="message"></span></p>
+
+        <button onclick="showPanel('center')">Show Center</button>
+
+        <script src="../scripts/mashup-util.js"></script>
+        <script>
+            (function() {
+                window.mashupUtil.messaging.subscribe('bottom', 'show', function(payload) {
+                    var message = document.body.querySelector('.message');
+
+                    message.innerHTML = payload;
+                    window.mashupUtil.bringToFront();
+                });
+
+                window.showPanel = function(panelType) {
+                    var intentInfo = getIntentInfo(panelType);
+
+                    window.mashupUtil.messaging.publish(
+                        intentInfo.intent,
+                        intentInfo.action,
+                        intentInfo.payload
+                    );
+                };
+
+                function getIntentInfo(type) {
+                    var intents = {
+                        top: { intent: 'top', action: 'show', payload: 'tip top bot' },
+                        center: { intent: 'center', action: 'base', payload: 'TOO' },
+                        left: { intent: 'left', action: 'show', payload: 'out in the top' },
+                        right: { intent: 'right', action: 'show', payload: '90 degree top' }
+                    };
+
+                    return intents[type];
+                }
+            })();
+        </script>
     </body>
 </html>
