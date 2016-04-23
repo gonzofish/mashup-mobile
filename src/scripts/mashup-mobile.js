@@ -126,7 +126,7 @@
     function getPanelSwipeDirection(panelType) {
         var directions = {
             bottom: 'DOWN',
-            center: 'ALL',
+            center: 'HORIZONTAL',
             left: 'LEFT',
             right: 'RIGHT',
             top: 'UP'
@@ -150,6 +150,8 @@
                 selectPanel(event.target, getElementUp);
                 break;
         }
+
+        event.preventDefault();
     }
 
     function selectPanel(currentElement, getPanelType) {
@@ -180,8 +182,7 @@
 
     function getElementDown(panelType) {
         var panelsUp = {
-            bottom: 'center',
-            center: 'top'
+            bottom: 'center'
         };
 
         return panelsUp[panelType];
@@ -207,8 +208,7 @@
 
     function getElementUp(panelType) {
         var panelsUp = {
-            center: 'bottom',
-            top: 'center',
+            top: 'center'
         };
 
         return panelsUp[panelType];
@@ -237,7 +237,6 @@
     }
 
     mashupMobile.bringToFront = function bringToFront(appBody) {
-        // need to have a way
         var panelType = appBody.panelType;
         var panel = panels[panelType].element;
         var frames = Array.from(panel.querySelectorAll('iframe'));
@@ -268,7 +267,6 @@
     };
 
     function publish(intent, dataType, payload) {
-        console.info('PUBLISH:', intent);
         var subscriptionKey = createSubscriptionKey(intent, dataType);
         var subscription = getSubscription(intent, dataType);
 
@@ -279,7 +277,6 @@
     }
 
     function subscribe(intent, dataType, callback) {
-        console.info('SUBSCRIBE:', intent);
         var subscriptionKey = createSubscriptionKey(intent, dataType);
         var subscription = getSubscription(intent, dataType);
 

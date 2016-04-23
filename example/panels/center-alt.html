@@ -7,7 +7,12 @@
 
     <body>
         <h1>A substitute center pane?!</h1>
-        <button onclick="callBase()">Swap Panels</button>
+        <button onclick="callBase()">Swap Panels</button><br><br>
+        <button onclick="showPanel('top')">Show Top</button><br>
+        <button onclick="showPanel('left')">Show Left</button><br>
+        <button onclick="showPanel('right')">Show Right</button><br>
+        <button onclick="showPanel('bottom')">Show Bottom</button>
+
         <script src="../scripts/mashup-util.js"></script>
         <script>
             (function() {
@@ -19,6 +24,27 @@
                 window.callBase = function() {
                     window.mashupUtil.messaging.publish('center', 'base', 'you got it!');
                 };
+
+                window.showPanel = function(panelType) {
+                    var intentInfo = getIntentInfo(panelType);
+
+                    window.mashupUtil.messaging.publish(
+                        intentInfo.intent,
+                        intentInfo.action,
+                        intentInfo.payload
+                    );
+                };
+
+                function getIntentInfo(type) {
+                    var intents = {
+                        bottom: { intent: 'bottom', action: 'show', payload: 'bottom-bottom' },
+                        left: { intent: 'left', action: 'show', payload: 'out in the rain' },
+                        right: { intent: 'right', action: 'show', payload: '90 degree' },
+                        top: { intent: 'top', action: 'show', payload: 'tip top tup' }
+                    };
+
+                    return intents[type];
+                }
             })();
         </script>
     </body>

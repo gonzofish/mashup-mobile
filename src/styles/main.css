@@ -1,17 +1,24 @@
 html, body {
     height: 100%;
+    overflow: hidden;
     width: 100%;
 }
 
 body {
+    border: none;
+    box-sizing: border-box;
     margin: 0;
     overflow: hidden;
     padding: 0;
+    position: relative;
 }
 
 .panel {
     border: 0;
+    box-sizing: border-box;
     height: 100%;
+    margin: 0;
+    overflow: hidden;
     position: absolute;
     top: 0;
     transition: left 0.5s linear, top 0.5s linear;
@@ -50,6 +57,7 @@ body {
 }
 
 .panel iframe.app-frame {
+    box-sizing: border-box;
     display: none;
     height: 100%;
     left: 0;

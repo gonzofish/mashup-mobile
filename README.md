@@ -10,15 +10,22 @@ for a mobile device.
 ##How's it Work?
 
 There are 5 "panels"--center, bottom, left, right, and top. The outer 4 panels (bottom, left, right, and top) are hidden when
-the Mashup loads up. By swiping or sending pubsub messages, each panel can be brought into view. Additionally, each panel can
-support multiple apps. Hopefully, the diagram below better explains how everything works:
+the Mashup loads up. By swiping or sending pubsub messages, panels can be brought into view. Because vertical scrolling and swiping
+are similar motions, the center pane can only swipe left and right. That being said, **apps which need to be accessed by swiping should
+be placed in the left, right, or center panels**.
+
+Additionally, each panel can support multiple apps. Hopefully, the diagram below better explains how everything works:
 
 
-    ------------------------------------------------------------------------------------
-
-                                        TOP
-                                  (swipe down only)
-
+                         ------------------------------------------
+                         |                                        |
+                         |                                        |
+                         |                                        |
+                         |                TOP                     |
+                         |          (swipe down only)             |
+                         |                                        |
+                         |                                        |
+                         |                                        |
     ------------------------------------------------------------------------------------
     |                    |                                        |                    |
     |                    |                                        |                    |
@@ -26,17 +33,22 @@ support multiple apps. Hopefully, the diagram below better explains how everythi
     |                    |                                        |                    |
     |                    |                                        |                    |
     |      LEFT          |               CENTER                   |       RIGHT        |
-    | (swipe right only) |        (swipes any direction)          | (swipe left only)  |
+    | (swipe right only) |         (swipes up and down)           | (swipe left only)  |
     |                    |                                        |                    |
     |                    |                                        |                    |
     |                    |                                        |                    |
     |                    |                                        |                    |
     ------------------------------------------------------------------------------------
-
-                                        Bottom
-                                    (swipe up only)
-
-    ------------------------------------------------------------------------------------
+                         |                                        |
+                         |                                        |
+                         |                                        |
+                         |                                        |
+                         |               BOTTOM                   |
+                         |           (swipe up only)              |
+                         |                                        |
+                         |                                        |
+                         |                                        |
+                         ------------------------------------------
 
 #The API
 
