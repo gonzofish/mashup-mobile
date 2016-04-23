@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <style>
+        </style>
+    </head>
+
+    <body>
+        <h1>Static on the Radio</h1>
+        <p>Received message:<span class="message"></span></p>
+
+        <button onclick="showPanel('center')">Show Center</button>
+
+        <script src="../scripts/mashup-util.js"></script>
+        <script>
+            (function() {
+                window.mashupUtil.messaging.subscribe('static', 'show', function(payload) {
+                    var message = document.body.querySelector('.message');
+
+                    message.innerHTML = payload;
+                    window.mashupUtil.bringToFront();
+                });
+
+                window.showPanel = function(panelType) {
+                    var intentInfo = getIntentInfo(panelType);
+
+                    window.mashupUtil.messaging.publish(
+                        intentInfo.intent,
+                        intentInfo.action,
+                        intentInfo.payload
+                    );
+                };
+
+                function getIntentInfo(type) {
+                    var intents = {
+                        bottom: { intent: 'bottom', action: 'show', payload: 'bottom-top' },
+                        center: { intent: 'center', action: 'base', payload: 'TOO' },
+                        left: { intent: 'left', action: 'show', payload: 'out in the top' },
+                        top: { intent: 'top', action: 'show', payload: 'tip top rock' }
+                    };
+
+                    return intents[type];
+                }
+            })();
+        </script>
+    </body>
+</html>

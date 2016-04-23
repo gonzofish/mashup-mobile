@@ -102,6 +102,10 @@
             iframe.classList.add('active');
         }
 
+        if (app.static) {
+            iframe.classList.add('static');
+        }
+
         return iframe;
     }
 
@@ -168,19 +172,21 @@
     }
 
     function dragPanel(event) {
-        switch (event.type) {
-            case 'swipedown':
-                selectPanel(event.target, getElementDown);
-                break;
-            case 'swipeleft':
-                selectPanel(event.target, getPreviousElement);
-                break;
-            case 'swiperight':
-                selectPanel(event.target, getNextElement);
-                break;
-            case 'swipeup':
-                selectPanel(event.target, getElementUp);
-                break;
+        if (!checkCurrentFrameIsStatic()) {
+            switch (event.type) {
+                case 'swipedown':
+                    selectPanel(event.target, getElementDown);
+                    break;
+                case 'swipeleft':
+                    selectPanel(event.target, getPreviousElement);
+                    break;
+                case 'swiperight':
+                    selectPanel(event.target, getNextElement);
+                    break;
+                case 'swipeup':
+                    selectPanel(event.target, getElementUp);
+                    break;
+            }
         }
 
         event.preventDefault();
@@ -321,7 +327,16 @@
     }
 
     function bringToolbarToFront(event) {
-        mashupMobile.bringToFront(event.target.appFrame.contentWindow.document.body);
+        if (!checkCurrentFrameIsStatic()) {
+            mashupMobile.bringToFront(event.target.appFrame.contentWindow.document.body);
+        }
+    }
+
+    function checkCurrentFrameIsStatic() {
+        var activePanel = document.body.querySelector('.panel.active');
+        var activeFrame = activePanel.querySelector('iframe.active');
+
+        return activeFrame.classList.contains('static');
     }
 
     mashupMobile.bringToFront = function bringToFront(appBody) {

@@ -85,6 +85,21 @@ a clickable element to bring the app into view.
 - `static`: _Boolean_; if set to true, when the app is brought to front, swiping is
 turned off for the panel.
 
+##A Note on Static Apps
+When an app is declared `static`, if it is in view, the toolbar and swiping will both become
+unresponsive. The only way to leave an static app is by sending an intent to another app which
+then, in turn, tells the framework to bring it into view through `bringToFront(appBody)`. That
+being said, just know that calling `bringToFront` assumes that when it is called, it has no
+restrictions on changing frames or panels.
+
+#The Toolbar
+The toolbar is an optional feature that is created just by giving one or more apps a name. The
+toolbar is placed at the top of the view and the height of the panels adjusts automatically to
+accomodate the smaller screen real estate.
+
+**As of now (2016-04-23), the toolbar cannot scroll, so try to limit the number of apps
+specified!**
+
 
 #Mashup Utility
 

@@ -11,7 +11,8 @@
         <button onclick="showPanel('top')">Show Top</button><br>
         <button onclick="showPanel('left')">Show Left</button><br>
         <button onclick="showPanel('right')">Show Right</button><br>
-        <button onclick="showPanel('bottom')">Show Bottom</button>
+        <button onclick="showPanel('bottom')">Show Bottom</button><br>
+        <button onclick="showPanel('static')">Show Static</button>
 
         <div style="margin-top: 1800px">This should be a ways down.</div>
         <script src="../scripts/mashup-util.js"></script>
@@ -41,6 +42,7 @@
                         bottom: { intent: 'bottom', action: 'show', payload: 'bottom-bottom' },
                         left: { intent: 'left', action: 'show', payload: 'out in the rain' },
                         right: { intent: 'right', action: 'show', payload: '90 degree' },
+                        static: { intent: 'static', action: 'show', payload: 'bigs' },
                         top: { intent: 'top', action: 'show', payload: 'tip top tup' }
                     };
 
