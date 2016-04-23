@@ -33,7 +33,7 @@ Additionally, each panel can support multiple apps. Hopefully, the diagram below
     |                    |                                        |                    |
     |                    |                                        |                    |
     |      LEFT          |               CENTER                   |       RIGHT        |
-    | (swipe right only) |         (swipes up and down)           | (swipe left only)  |
+    | (swipe right only) |       (swipes left and right)          | (swipe left only)  |
     |                    |                                        |                    |
     |                    |                                        |                    |
     |                    |                                        |                    |
