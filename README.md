@@ -52,13 +52,16 @@ Additionally, each panel can support multiple apps. Hopefully, the diagram below
 
 #The API
 
-- `mashupMobile.init(apps)`: The `apps` parameter is an object that understands
-5 keys; each value is an array of App Definition Objects (see below):
-    - `bottom`
-    - `center` (required)
-    - `left`
-    - `right`
-    - `top`
+- `mashupMobile.init(apps, toolbarOrder)`: initialize the mashup.
+    - `apps`: _Object_; understands 5 keys (below); each value is an array of App Definition Objects:
+        - `bottom`
+        - `center` (required)
+        - `left`
+        - `right`
+        - `top`
+    - `toolbarOrder`: _Array<String>_; if applications are given names, a toolbar is created, those
+    names can be provided in this array to specify the order they appear in the toolbar. If a name
+    is ommitted, it will be added to the end of the list at random.
 - `mashupMobile.messaging`
     - `.publish(type, action, payload)`: Send a pubsub message of the `type` and
     `action` with some data (`payload`)
@@ -77,6 +80,8 @@ The App Definition Object structure:
 - `url` (required): _String_; the URL of the application for the IFRAME
 - `active`: _Boolean_; bring to front when the app loads; if ommitted, the first app
 in the array specified during `init` is brought to front.
+- `name`: _String_; the name of the app. Specifying this will create a toolbar and place
+a clickable element to bring the app into view.
 - `static`: _Boolean_; if set to true, when the app is brought to front, swiping is
 turned off for the panel.
 
