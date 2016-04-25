@@ -14,6 +14,14 @@
             (function() {
                 var centerFrames = [];
 
+                // The following code can be uncommented to demonstrate using an
+                // alternative messaging protocol. Remove or comment out one of the
+                // methods to see the console error.
+                // window.mashupMobile.setMessagingProtocol({
+                //     publish: function() { console.info('PUBLISH: ', arguments); },
+                //     subscribe: function() { console.info('SUBSCRIBE: ', arguments); }
+                // });
+
                 window.mashupMobile.init({
                     bottom: [{ name: 'Bottom', url: 'panels/bottom.html' }],
                     center: [{ name: 'Center', url: 'panels/center.html' }, { name: 'Center-Alt', url: 'panels/center-alt.html', active: true }],

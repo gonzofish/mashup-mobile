@@ -62,6 +62,9 @@ Additionally, each panel can support multiple apps. Hopefully, the diagram below
     - `toolbarOrder`: _Array<String>_; if applications are given names, a toolbar is created, those
     names can be provided in this array to specify the order they appear in the toolbar. If a name
     is ommitted, it will be added to the end of the list at random.
+- `mashupMobile.setMessagingProtocol(messagingProtocol)`: replace Mashup Mobile's default messaging
+protocol with your own. At minimum, a `.publish` and `.subscribe` method must be present on the passed
+in protocol.
 - `mashupMobile.messaging`
     - `.publish(type, action, payload)`: Send a pubsub message of the `type` and
     `action` with some data (`payload`)
@@ -113,12 +116,22 @@ to specify the app's body.
 #Examples
 
 ##Initialization
+###Basic
 ```javascript
 window.mashupMobile.init({
     center: [{ url: 'first.html' }, { url: 'second.html' }],
     left: [{ static: true, url: 'images.html' }],
     right: [{ url: 'colors.html' }, { active: true, url: 'numbers.html' }]
 });
+```
+
+###With Toolbar & Toolbar Order
+```javascript
+window.mashupMobile.init({
+    center: [{ name: 'Main', url: 'first.html' }, { url: 'second.html' }],
+    left: [{ static: true, url: 'images.html' }],
+    right: [{ name: 'Colors', url: 'colors.html' }, { name: 'Numbers', active: true, url: 'numbers.html' }]
+}, ['Center', 'Numbers', 'Colors']);
 ```
 
 ##Messaging
@@ -130,8 +143,17 @@ function reactToPlanning(payload) {
 }
 ```
 
-##Publishing
+###Publishing
 ```javascript
 var partyDetails = {guests: 12, location: 'The Pizza Palace' };
 window.mashupMobile.publish('party', 'planning', partyDetails);
+```
+
+###Changing Protocol
+```javascript
+var consoleProtocol = {
+    publish: function() { console.info('PUBLISHED:', arguments); },
+    subscribe: function() { console.info('SUBSCRIBED:', arguments); }
+};
+window.mashupMobile.setMessagingProtocol(consoleProtocol);
 ```

@@ -399,4 +399,18 @@
         return intent + ':' + dataType;
     }
 
+    mashupMobile.setMessagingProtocol = function setMessagingProtocol(messagingProtocol) {
+        if (checkMessagingProtocol(messagingProtocol)) {
+            mashupMobile.messaging = messagingProtocol;
+        } else {
+            console.error('The messaging protocol requires at least a `publish` and `subscribe` method. MashupMobile will use its default messaging mechanism.');
+        }
+    };
+
+    function checkMessagingProtocol(messagingProtocol) {
+        return messagingProtocol &&
+            typeof messagingProtocol.publish === 'function' &&
+            typeof messagingProtocol.subscribe === 'function';
+    }
+
 })(window.mashupMobile = window.mashupMobile || {});
