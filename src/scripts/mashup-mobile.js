@@ -205,17 +205,37 @@
     }
 
     function getElementPanelType(element) {
-        var panel = element;
+        var panel;
 
         if (checkElementIsAppFrame(element)) {
             panel = panels[element.panelType].element;
+        } else if (!checkElementIsPanel(element)) {
+            element = getBodyFromChild(element);
+            panel = panels[element.panelType].element;
+        } else {
+            panel = element;
         }
 
         return panel.classList[1];
     }
 
     function checkElementIsAppFrame(element) {
-        return !element.classList.contains('panel') && element.panelType;
+        return !checkElementIsPanel(element) && !!element.panelType;
+    }
+
+    function checkElementIsPanel(element) {
+        return element.classList.contains('panel');
+    }
+
+    function getBodyFromChild(element) {
+        var appBody = element;
+        var panelType;
+
+        while (appBody && appBody.tagName !== 'BODY') {
+            appBody = element.parentNode;
+        }
+
+        return appBody;
     }
 
     function getElementDown(panelType) {
