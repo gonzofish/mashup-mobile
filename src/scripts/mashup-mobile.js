@@ -232,7 +232,7 @@
         var panelType;
 
         while (appBody && appBody.tagName !== 'BODY') {
-            appBody = element.parentNode;
+            appBody = appBody.parentNode;
         }
 
         return appBody;
