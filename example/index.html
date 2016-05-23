@@ -5,9 +5,26 @@
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
 
         <link href="styles/main.css" rel="stylesheet">
+        <style>
+            .banner {
+                background-color: pink;
+                color: black;
+                font-weight: bold;
+                height: 20px;
+                text-align: center;
+                width: 100%;
+            }
+            #panelHolder {
+                height: calc(100% - 40px);
+            }
+        </style>
     </head>
 
     <body>
+        <div class="banner">This is a top banner</div>
+        <div id="panelHolder"></div>
+        <div class="banner">This is a bottom banner</div>
+
         <script src="hammerjs/hammer.js"></script>
         <script src="scripts/mashup-mobile.js"></script>
         <script>
@@ -21,14 +38,13 @@
                 //     publish: function() { console.info('PUBLISH: ', arguments); },
                 //     subscribe: function() { console.info('SUBSCRIBE: ', arguments); }
                 // });
-
                 window.mashupMobile.init({
                     bottom: [{ name: 'Bottom', url: 'panels/bottom.html' }],
                     center: [{ name: 'Center', url: 'panels/center.html' }, { name: 'Center-Alt', url: 'panels/center-alt.html', active: true }],
                     left: [{ name: 'Left', url: 'panels/left.html' }],
                     right: [{ url: 'panels/right.html' }, { static: true, url: 'panels/static.html' }],
                     top: [{ name: 'Top', url: 'panels/top.html' }]
-                }, ['Center', 'Center-Alt', 'Bottom', 'Top']);
+                }, ['Center', 'Center-Alt', 'Bottom', 'Top'], document.querySelector('#panelHolder'));
             })();
         </script>
     </body>

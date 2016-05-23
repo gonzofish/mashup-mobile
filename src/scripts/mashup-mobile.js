@@ -6,25 +6,26 @@
     var panels;
     var subscriptions = {};
 
-    mashupMobile.init = function init(apps, toolbarOrder) {
+    mashupMobile.init = function init(apps, toolbarOrder, targetArea) {
         var panelContainer;
 
         apps = apps || {};
         toolbarApps = [];
         toolbarOrder = toolbarOrder || [];
 
-        panelContainer = createPanelContainer();
+        targetArea = targetArea || document.body;
+        panelContainer = createPanelContainer(targetArea);
         panels = createPanels(apps, panelContainer);
 
-        createToolbar(panelContainer, toolbarOrder);
+        createToolbar(panelContainer, toolbarOrder, targetArea);
         showPanel('center');
     };
 
-    function createPanelContainer() {
+    function createPanelContainer(targetArea) {
         var panelContainer = document.createElement('div');
 
         panelContainer.classList.add('panel-container');
-        document.body.appendChild(panelContainer);
+        targetArea.appendChild(panelContainer);
 
         return panelContainer;
     }
@@ -294,13 +295,13 @@
         panels.center.element.classList.add(panelType);
     }
 
-    function createToolbar(panelContainer, toolbarOrder) {
+    function createToolbar(panelContainer, toolbarOrder, targetArea) {
         var toolbarDOM;
 
         if (toolbarApps.length > 0) {
             toolbarDOM = generateToolbarDOM(toolbarOrder);
             panelContainer.classList.add('toolbar');
-            document.body.insertBefore(toolbarDOM, panelContainer);
+            targetArea.insertBefore(toolbarDOM, panelContainer);
         }
     }
 

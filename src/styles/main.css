@@ -30,8 +30,8 @@ body {
     transition: none;
 }
 .panel-container.toolbar {
-    height: calc(100% - 24px);
-    top: 30px;
+    height: calc(100% - 30px);
+    position: relative;
 }
 
 .panel.active {
