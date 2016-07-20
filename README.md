@@ -1,11 +1,17 @@
 #Mashup Mobile
 
-The [Ozone Widget Framework](http://ozone-development.github.io/ozone-website/) is something I've worked with at my job
+The [Ozone Widget Framework](http://ozone-development.github.io/ozone-website/ "Ozone") is something I've worked with at my job
 quite a bit. One problem I've had with it is that it can't be used on a mobile device--the way the frames are laid
 out just isn't conducive to a small screen.
 
-So I took this opportunity to leverage [Hammer.js](http://hammerjs.github.io/) to create a similar idea that fits
+So I took this opportunity to leverage [Hammer.js](http://hammerjs.github.io/ "HammerJS") to create a similar idea that fits
 for a mobile device.
+
+##Compatibility
+
+This framework was developed with the future in mind. This means that if you need to support browsers that do not fully
+support modern JavaScript, you will need to include a shim of some sort. In the examples, we use the
+[ES6 Shim](https://github.com/paulmillr/es6-shim "ES6 Shim").
 
 ##How's it Work?
 
