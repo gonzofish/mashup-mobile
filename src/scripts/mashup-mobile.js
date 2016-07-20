@@ -69,7 +69,8 @@
     function createPanelDOM(panelType) {
         var panel = document.createElement('div');
 
-        panel.classList.add('panel', panelType);
+        panel.classList.add('panel');
+        panel.classList.add(panelType);
 
         return panel;
     }
@@ -291,7 +292,10 @@
     }
 
     function updateCenterPanel(panelType) {
-        panels.center.element.classList.remove('bottom', 'left', 'right', 'top');
+        panels.center.element.classList.remove('bottom');
+        panels.center.element.classList.remove('left');
+        panels.center.element.classList.remove('right');
+        panels.center.element.classList.remove('top');
         panels.center.element.classList.add(panelType);
     }
 

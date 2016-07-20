@@ -23,6 +23,7 @@
     "node-sass": "^3.5.3"
   },
   "devDependencies": {
+    "es6-shim": "^0.35.1",
     "lite-server": "^2.2.0"
   }
 }
