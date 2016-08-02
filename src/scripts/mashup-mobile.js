@@ -105,7 +105,7 @@
         }
 
         if (app.name) {
-            iframe.dataset.appName = app.name.toLowerCase();
+            iframe.dataset.appName = getAppCSSName(app.name);
         }
 
         if (app.static) {
@@ -371,10 +371,14 @@
 
         toolbarApp.appFrame = app.frame;
         toolbarApp.innerHTML = app.name;
-        toolbarApp.classList.add(app.name.toLowerCase());
+        toolbarApp.classList.add(getAppCSSName(app.name));
         toolbarApp.addEventListener('click', bringToolbarToFront);
 
         return toolbarApp;
+    }
+
+    function getAppCSSName(name) {
+        return name.toLowerCase().replace(/[\s\.\#\?\!\*\\\~\@\$\%\^\&\(\)\+\=\,\/\'\;\:\"\>\<\[\]\{\}\|\`]+/g, '-');
     }
 
     function bringToolbarToFront(event) {
