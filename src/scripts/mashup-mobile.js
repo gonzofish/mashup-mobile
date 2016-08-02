@@ -104,6 +104,10 @@
             iframe.classList.add('active');
         }
 
+        if (app.name) {
+            iframe.dataset.appName = app.name.toLowerCase();
+        }
+
         if (app.static) {
             iframe.classList.add('static');
         }
@@ -146,6 +150,10 @@
                 hammerifyElement(appBody, panelType);
                 appBody.iframe = appFrame;
                 appBody.panelType = panelType;
+
+                if (!!appFrame.dataset.appName) {
+                    appBody.appName = appFrame.dataset.appName;
+                }
             });
         });
     }
@@ -200,9 +208,7 @@
         var nextPanel = panels[nextPanelType];
 
         if (nextPanel) {
-            updateCenterPanel(nextPanelType);
-            hidePanel(currentPanelType);
-            showPanel(nextPanelType);
+            showHidePanels(nextPanelType, currentPanelType);
         }
     }
 
@@ -277,6 +283,11 @@
     function hidePanel(panelType) {
         var panel = panels[panelType];
         var element = panel.element;
+        var activeFrame = element.querySelector('iframe.active');
+
+        if (activeFrame && activeFrame.dataset.appName) {
+            setToolbarAppActive(activeFrame.dataset.appName, 'remove');
+        }
 
         element.classList.remove('active');
         panel.set({ active: false });
@@ -285,10 +296,24 @@
     function showPanel(panelType) {
         var panel = panels[panelType];
         var element = panel.element;
+        var activeFrame = element.querySelector('iframe.active');
+
+        if (activeFrame && activeFrame.dataset.appName) {
+            setToolbarAppActive(activeFrame.dataset.appName, 'add');
+        }
 
         element.classList.add('active');
         panel.set({ active: true });
         activePanelType = panelType;
+    }
+
+    function setToolbarAppActive(appName, classListMethod) {
+        var toolbar = document.querySelector('ul.toolbar');
+        var appItem = toolbar.querySelector('li.' + appName);
+
+        if (appItem) {
+            appItem.classList[classListMethod]('active');
+        }
     }
 
     function updateCenterPanel(panelType) {
@@ -346,6 +371,7 @@
 
         toolbarApp.appFrame = app.frame;
         toolbarApp.innerHTML = app.name;
+        toolbarApp.classList.add(app.name.toLowerCase());
         toolbarApp.addEventListener('click', bringToolbarToFront);
 
         return toolbarApp;
@@ -369,6 +395,8 @@
         var panel = panels[panelType].element;
         var frames = Array.from(panel.querySelectorAll('iframe'));
 
+        setToolbarAppActive('active', 'remove');
+
         frames.forEach(function(frame) {
             frame.classList.remove('active');
         });
@@ -379,10 +407,13 @@
             }
         });
 
+        showHidePanels(panelType, activePanelType);
+    };
 
-        updateCenterPanel(panelType);
-        hidePanel(activePanelType);
-        showPanel(panelType);
+    function showHidePanels(nextPanelType, currentPanelType) {
+        updateCenterPanel(nextPanelType);
+        hidePanel(currentPanelType);
+        showPanel(nextPanelType);
     };
 
     mashupMobile.messaging = {
