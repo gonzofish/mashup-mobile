@@ -1,0 +1,22 @@
+{
+  "name": "mashup-mobile",
+  "description": "A mobile-capable multi-app environment",
+  "main": "index.js",
+  "authors": [
+    "Matt Fehskens <matt.fehskens@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "lite-server.config.js",
+    "node_modules",
+    "example",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "hammerjs": "^2.0.8",
+    "es6-shim": "^0.35.1"
+  }
+}
