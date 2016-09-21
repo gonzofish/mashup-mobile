@@ -1,7 +1,7 @@
 {
   "name": "mashup-mobile",
-  "version": "0.1.0",
-  "description": "A Mashup App environment",
+  "version": "0.2.0",
+  "description": "A mobile-capable multi-app environment",
   "main": "index.js",
   "scripts": {
     "dev": "lite-server -c lite-server.config.js",
