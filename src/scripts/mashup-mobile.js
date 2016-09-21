@@ -75,9 +75,18 @@
         return panel;
     }
 
-    function createAppFrames(apps) {
+    function createAppFrames(apps, panel) {
         return apps.reduce(function(frames, app) {
-            var appFrame = createAppFrame(app);
+            var appFrame;
+
+            if (!app.lazy) {
+                appFrame = createAppFrame(app);
+            } else {
+                appFrame = {
+                    app: app,
+                    panel: panel
+                };
+            }
 
             frames.frames.push(appFrame);
             if (app.name) {
@@ -97,11 +106,14 @@
         iframe.classList.add('app-frame');
         iframe.setAttribute('frameborder', 0);
         iframe.setAttribute('height', '100%');
-        iframe.setAttribute('src', app.url);
         iframe.setAttribute('width', '100%');
 
         if (app.active) {
             iframe.classList.add('active');
+        }
+
+        if (!app.lazy) {
+            iframe.setAttribute('src', app.url);
         }
 
         if (app.name) {
@@ -118,7 +130,9 @@
     function addFramesToPanel(frames, panel) {
         ensureActiveFrame(frames);
         frames.forEach(function(frame) {
-            panel.appendChild(frame);
+            if (typeof frame.appendChild === 'function') {
+                panel.appendChild(frame);
+            }
         });
     }
 
@@ -130,7 +144,7 @@
 
     function checkHasActiveFrame(frames) {
         return frames.reduce(function(hasActive, frame) {
-            if (frame.classList.contains('active')) {
+            if (frame.classList && frame.classList.contains('active')) {
                 hasActive = true;
             }
 
@@ -144,17 +158,27 @@
 
     function hammerifyFramesOnLoad(appFrames, panelType) {
         appFrames.forEach(function(appFrame) {
-            appFrame.addEventListener('load', function() {
-                var appBody = appFrame.contentWindow.document.body;
+            if (typeof appFrame.addEventListener === 'function') {
+                hammerifyFrame(appFrame, panelType);
+            }
+        });
+    }
 
-                hammerifyElement(appBody, panelType);
-                appBody.iframe = appFrame;
-                appBody.panelType = panelType;
+    function hammerifyFrame(appFrame, panelType, callback) {
+        appFrame.addEventListener('load', function() {
+            var appBody = appFrame.contentWindow.document.body;
 
-                if (!!appFrame.dataset.appName) {
-                    appBody.appName = appFrame.dataset.appName;
-                }
-            });
+            hammerifyElement(appBody, panelType);
+            appBody.iframe = appFrame;
+            appBody.panelType = panelType;
+
+            if (!!appFrame.dataset.appName) {
+                appBody.appName = appFrame.dataset.appName;
+            }
+
+            if (typeof callback === 'function') {
+                callback();
+            }
         });
     }
 
@@ -383,7 +407,11 @@
 
     function bringToolbarToFront(event) {
         if (!checkCurrentFrameIsStatic()) {
-            mashupMobile.bringToFront(event.target.appFrame.contentWindow.document.body);
+            if (event.target.appFrame && event.target.appFrame.contentWindow) {
+                mashupMobile.bringToFront(event.target.appFrame.contentWindow.document.body);
+            } else if (event.target.appFrame && event.target.appFrame.app) {
+                event.target.appFrame = createToFront(event.target.appFrame);
+            }
         }
     }
 
@@ -392,6 +420,19 @@
         var activeFrame = activePanel.querySelector('iframe.active');
 
         return activeFrame.classList.contains('static');
+    }
+
+    function createToFront(info) {
+        var frame = createAppFrame(info.app);
+
+        frame.setAttribute('src', info.app.url);
+        hammerifyFrame(frame, getElementPanelType(info.panel), function() {
+            mashupMobile.bringToFront(frame.contentWindow.document.body);
+        });
+
+        info.panel.appendChild(frame);
+
+        return frame;
     }
 
     mashupMobile.bringToFront = function bringToFront(appBody) {
