@@ -67,15 +67,16 @@ body {
 
 .panel iframe.app-frame {
     box-sizing: border-box;
-    display: none;
+    display: block;
     height: 100%;
     left: 0;
     position: absolute;
     top: 0;
+    visibility: hidden;
     width: 100%;
 }
 .panel iframe.app-frame.active {
-    display: block;
+    visibility: visible;
 }
 
 ul.toolbar {
