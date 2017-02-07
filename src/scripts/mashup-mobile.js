@@ -2,6 +2,7 @@
 
 (function(mashupMobile) {
     var activePanelType;
+    var activeApp;
     var toolbarApps;
     var panels;
     var subscriptions = {};
@@ -19,6 +20,7 @@
 
         createToolbar(panelContainer, toolbarOrder, targetArea);
         showPanel('center');
+        setActiveAppByFrame(activeApp);
     };
 
     function createPanelContainer(targetArea) {
@@ -110,6 +112,7 @@
 
         if (app.active) {
             iframe.classList.add('active');
+            activeApp = iframe;
         }
 
         if (!app.lazy) {
@@ -427,12 +430,23 @@
 
         frame.setAttribute('src', info.app.url);
         hammerifyFrame(frame, getElementPanelType(info.panel), function() {
+            updateToolbarApps(info.app, frame);
             mashupMobile.bringToFront(frame.contentWindow.document.body);
         });
 
         info.panel.appendChild(frame);
 
         return frame;
+    }
+
+    function updateToolbarApps(app, frame) {
+        var matches = toolbarApps.filter(function(toolbarApp) {
+            return toolbarApp.name === app.name;
+        });
+
+        if (matches.length > 0) {
+            matches[0].frame = frame;
+        }
     }
 
     mashupMobile.bringToFront = function bringToFront(appBody) {
@@ -448,11 +462,29 @@
 
         frames.forEach(function(frame) {
             if (frame === appBody.iframe) {
+                setActiveAppByFrame(frame);
                 frame.classList.add('active');
             }
         });
 
         showHidePanels(panelType, activePanelType);
+    };
+
+    function setActiveAppByFrame(frame) {
+        var matches = toolbarApps.filter(function(app) {
+            return app.frame === frame;
+        });
+        var match = null;
+
+        if (matches.length > 0) {
+            match = matches[0];
+        }
+
+        activeApp = match;
+    }
+
+    mashupMobile.getActiveApp = function getActiveApp() {
+        return Object.freeze(Object.assign({}, activeApp));
     };
 
     function showHidePanels(nextPanelType, currentPanelType) {
