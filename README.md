@@ -1,4 +1,4 @@
-#Mashup Mobile
+# Mashup Mobile
 
 The [Ozone Widget Framework](http://ozone-development.github.io/ozone-website/ "Ozone") is something I've worked with at my job
 quite a bit. One problem I've had with it is that it can't be used on a mobile device--the way the frames are laid
@@ -7,13 +7,13 @@ out just isn't conducive to a small screen.
 So I took this opportunity to leverage [Hammer.js](http://hammerjs.github.io/ "HammerJS") to create a similar idea that fits
 for a mobile device.
 
-##Compatibility
+## Compatibility
 
 This framework was developed with the future in mind. This means that if you need to support browsers that do not fully
 support modern JavaScript, you will need to include a shim of some sort. In the examples, we use the
 [ES6 Shim](https://github.com/paulmillr/es6-shim "ES6 Shim").
 
-##How's it Work?
+## How's it Work?
 
 There are 5 "panels"--center, bottom, left, right, and top. The outer 4 panels (bottom, left, right, and top) are hidden when
 the Mashup loads up. By swiping or sending pubsub messages, panels can be brought into view. Because vertical scrolling and swiping
@@ -56,7 +56,7 @@ Additionally, each panel can support multiple apps. Hopefully, the diagram below
                          |                                        |
                          ------------------------------------------
 
-#The API
+# The API
 
 - `mashupMobile.init(apps, toolbarOrder)`: initialize the mashup.
     - `apps`: _Object_; understands 5 keys (below); each value is an array of App Definition Objects:
@@ -82,7 +82,7 @@ in protocol.
   reference to that app's body, the Mobile Mashup will bring the application's
   IFRAME and panel into view. The Mashup Utility (see below) can help with this.
 
-#App Definition Object:
+# App Definition Object:
 
 The App Definition Object structure:
 
@@ -94,7 +94,7 @@ a clickable element to bring the app into view.
 - `static`: _Boolean_; if set to true, when the app is brought to front, swiping is
 turned off for the panel.
 
-##A Note on Static Apps
+## A Note on Static Apps
 When an app is declared `static`, if it is in view, the toolbar and swiping will both become
 unresponsive. The only way to leave an static app is by sending an intent to another app which
 then, in turn, tells the framework to bring it into view through `bringToFront(appBody)`. That
@@ -110,7 +110,7 @@ accomodate the smaller screen real estate.
 specified!**
 
 
-#Mashup Utility
+# Mashup Utility
 
 The file `mashup-util.js` can be placed in each app to allow them to to interact
 with Mashup Mobile. It provides the following methods:
@@ -119,10 +119,10 @@ with Mashup Mobile. It provides the following methods:
 - `mashupUtil.bringToFront()`: provides access to `mashupMobile` without needing
 to specify the app's body.
 
-#Examples
+# Examples
 
-##Initialization
-###Basic
+## Initialization
+### Basic
 ```javascript
 window.mashupMobile.init({
     center: [{ url: 'first.html' }, { url: 'second.html' }],
@@ -131,7 +131,7 @@ window.mashupMobile.init({
 });
 ```
 
-###With Toolbar & Toolbar Order
+### With Toolbar & Toolbar Order
 ```javascript
 window.mashupMobile.init({
     center: [{ name: 'Main', url: 'first.html' }, { url: 'second.html' }],
@@ -140,8 +140,8 @@ window.mashupMobile.init({
 }, ['Center', 'Numbers', 'Colors']);
 ```
 
-##Messaging
-###Subscribing
+## Messaging
+### Subscribing
 ```javascript
 window.mashupMobile.subscribe('party', 'planning', reactToPlanning);
 function reactToPlanning(payload) {
@@ -149,13 +149,13 @@ function reactToPlanning(payload) {
 }
 ```
 
-###Publishing
+### Publishing
 ```javascript
 var partyDetails = {guests: 12, location: 'The Pizza Palace' };
 window.mashupMobile.publish('party', 'planning', partyDetails);
 ```
 
-###Changing Protocol
+### Changing Protocol
 ```javascript
 var consoleProtocol = {
     publish: function() { console.info('PUBLISHED:', arguments); },
