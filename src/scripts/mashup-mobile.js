@@ -336,10 +336,12 @@
 
     function setToolbarAppActive(appName, classListMethod) {
         var toolbar = document.querySelector('ul.toolbar');
-        var appItem = toolbar.querySelector('li.' + appName);
+        if (toolbar) {
+            var appItem = toolbar.querySelector('li.' + appName);
 
-        if (appItem) {
-            appItem.classList[classListMethod]('active');
+            if (appItem) {
+                appItem.classList[classListMethod]('active');
+            }
         }
     }
 
