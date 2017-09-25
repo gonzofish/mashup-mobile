@@ -81,6 +81,9 @@ in protocol.
   panel type and iframe each app lives in to the body of that app. By sending a
   reference to that app's body, the Mobile Mashup will bring the application's
   IFRAME and panel into view. The Mashup Utility (see below) can help with this.
+- `mashupMobile.bringToFronBy(value, type)`: allows ability to bring an application
+  to the front by using its URL or name. Valid values for `type` are `name` and
+  `url` (case-sensitive).
 
 # App Definition Object:
 
@@ -163,3 +166,14 @@ var consoleProtocol = {
 };
 window.mashupMobile.setMessagingProtocol(consoleProtocol);
 ```
+
+### Bringing to Front By Name
+```javascript
+window.mashupMobile.bringToFrontBy('Numbers', 'name');
+```
+
+### Bringing to Front by URL
+```javascript
+window.mashupMobile.bringToFrontBy('first.html', 'url');
+```
+
