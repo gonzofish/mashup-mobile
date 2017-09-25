@@ -3,6 +3,8 @@
 (function(mashupMobile) {
     var activePanelType;
     var activeApp;
+    var appLookup = { name: {}, url: {} };
+    var appTracker = [];
     var toolbarApps;
     var panels;
     var subscriptions = {};
@@ -80,6 +82,7 @@
     function createAppFrames(apps, panel) {
         return apps.reduce(function(frames, app) {
             var appFrame;
+            var trackerPosition;
 
             if (!app.lazy) {
                 appFrame = createAppFrame(app);
@@ -91,11 +94,15 @@
             }
 
             frames.frames.push(appFrame);
+            trackerPosition = appTracker.push(appFrame) - 1;
+
+            appLookup.url[app.url] = trackerPosition;
             if (app.name) {
                 frames.toolbar.push({
                     name: app.name,
                     frame: appFrame
                 });
+                appLookup.name[app.name] = trackerPosition;
             }
 
             return frames;
@@ -410,13 +417,34 @@
         return name.toLowerCase().replace(/[\s\.\#\?\!\*\\\~\@\$\%\^\&\(\)\+\=\,\/\'\;\:\"\>\<\[\]\{\}\|\`]+/g, '-');
     }
 
+    mashupMobile.bringToFrontBy = function bringToFrontBy(value, type) {
+        var trackerPosition;
+
+        if (type && appLookup[type]) {
+            trackerPosition = appLookup[type][value];
+        } else {
+            trackerPosition = appLookup.name[value] || appLookup.url[value];
+        }
+
+        if (trackerPosition !== -1) {
+            bringAppFrameToFront(appTracker[trackerPosition]);
+        }
+    };
+
     function bringToolbarToFront(event) {
-        if (!checkCurrentFrameIsStatic()) {
-            if (event.target.appFrame && event.target.appFrame.contentWindow) {
-                mashupMobile.bringToFront(event.target.appFrame.contentWindow.document.body);
-            } else if (event.target.appFrame && event.target.appFrame.app) {
-                event.target.appFrame = createToFront(event.target.appFrame);
-            }
+        var trackerPosition;
+
+        if (!checkCurrentFrameIsStatic() && event.target.appFrame) {
+            event.target.appFrame = bringAppFrameToFront(event.target.appFrame);
+        }
+    }
+
+    function bringAppFrameToFront(appFrame, trackerPosition) {
+        if (appFrame.contentWindow) {
+            mashupMobile.bringToFront(appFrame.contentWindow.document.body);
+            return appFrame;
+        } else if (appFrame.app) {
+            return createToFront(appFrame, trackerPosition);
         }
     }
 
@@ -429,6 +457,7 @@
 
     function createToFront(info) {
         var frame = createAppFrame(info.app);
+        var trackerPosition = appTracker[appLookup.url[info.app.url]];
 
         frame.setAttribute('src', info.app.url);
         hammerifyFrame(frame, getElementPanelType(info.panel), function() {
@@ -437,6 +466,7 @@
         });
 
         info.panel.appendChild(frame);
+        appTracker[trackerPosition] = frame;
 
         return frame;
     }
